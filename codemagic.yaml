@@ -11,21 +11,7 @@ workflows:
     scripts:
       - npm install
       - echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/android/local.properties"
-      - |
-        # build Android
-        cd android
+      - cd android
         ./gradlew assembleDebug
-      - |
-        # build iOS
-        cd ios
-        pod install
-        xcodebuild build -workspace "$XCODE_WORKSPACE.xcworkspace" -scheme "$XCODE_SCHEME" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
     artifacts:
       - android/app/build/outputs/**/**/*.apk
-      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
-    publishing:
-      app_store_connect:
-        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
-        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
-        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
-        submit_to_testflight: true
